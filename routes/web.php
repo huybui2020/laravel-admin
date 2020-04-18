@@ -35,3 +35,4 @@ Route::post('admin/generator', ['uses' => '\Appzcoder\LaravelAdmin\Controllers\P
 
 
 Route::resource('admin/categories', 'Admin\\CategoriesController');
+Route::resource('admin/post', 'Admin\\PostController');
