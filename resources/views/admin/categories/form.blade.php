@@ -5,7 +5,7 @@
 </div>
 <div class="form-group {{ $errors->has('cate_slug') ? 'has-error' : ''}}">
     {!! Form::label('cate_slug', 'Cate Slug', ['class' => 'control-label']) !!}
-    {!! Form::text('cate_slug', null, ('' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
+    {!! Form::text('cate_slug', null, ('required' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
     {!! $errors->first('cate_slug', '<p class="help-block">:message</p>') !!}
 </div>
 

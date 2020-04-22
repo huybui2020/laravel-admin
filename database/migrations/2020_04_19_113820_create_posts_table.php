@@ -15,12 +15,12 @@ class CreatePostsTable extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
+            $table->integer('post_cateid')->nullable();
             $table->string('post_title')->nullable();
             $table->text('post_teaser')->nullable();
             $table->longText('post_content')->nullable();
             $table->string('post_image')->nullable();
             $table->string('post_imgdesc')->nullable();
-            $table->integer('post_cateid')->nullable();
             });
     }
 

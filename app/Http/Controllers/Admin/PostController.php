@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Http\Requests;
 use App\Category;
 use App\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-
 class PostController extends Controller
 {
     /**
@@ -22,12 +21,12 @@ class PostController extends Controller
         $perPage = 25;
 
         if (!empty($keyword)) {
-            $post = Post::where('post_title', 'LIKE', "%$keyword%")
+            $post = Post::where('post_cateid', 'LIKE', "%$keyword%")
+                ->orWhere('post_title', 'LIKE', "%$keyword%")
                 ->orWhere('post_teaser', 'LIKE', "%$keyword%")
                 ->orWhere('post_content', 'LIKE', "%$keyword%")
                 ->orWhere('post_image', 'LIKE', "%$keyword%")
                 ->orWhere('post_imgdesc', 'LIKE', "%$keyword%")
-                ->orWhere('post_cateid', 'LIKE', "%$keyword%")
                 ->latest()->paginate($perPage);
         } else {
             $post = Post::latest()->paginate($perPage);
@@ -62,7 +61,7 @@ class PostController extends Controller
 			'post_content' => 'required',
 			'post_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
 			'post_imgdesc' => 'required'
-        ]);
+		]);
         $post = new Post();
         if($request->hasFile('post_image')){
             $image = $request->file('post_image');
@@ -78,8 +77,9 @@ class PostController extends Controller
         $post->post_imgdesc = $request->get('post_imgdesc');
 
         $post->save();
-return redirect('admin/post')->with('flash_message', 'Post added!');
-}
+
+        return redirect('admin/post')->with('flash_message', 'Post added!');
+    }
 
     /**
      * Display the specified resource.
@@ -104,9 +104,10 @@ return redirect('admin/post')->with('flash_message', 'Post added!');
      */
     public function edit($id)
     {
-        $post = Post::findOrFail($id);
+        $cates = Category::pluck('cate_name', 'id');
+        $post = Post::find($id);
 
-        return view('admin.post.edit', compact('post'));
+        return view('admin.post.edit', compact('cates', 'post'));
     }
 
     /**
@@ -118,19 +119,25 @@ return redirect('admin/post')->with('flash_message', 'Post added!');
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function update(Request $request, $id)
-    {
-        $this->validate($request, [
+    {$this->validate($request, [
 			'post_title' => 'required',
 			'post_teaser' => 'required',
-			'post_content' => 'required',
-			'post_image' => 'required',
-			'post_imgdesc' => 'required'
+            'post_content' => 'required',
+			'post_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'post_imgdesc' => 'required',
 		]);
-        $requestData = $request->all();
-        
+        $requestData = $request->except('image');
+        if($request->hasFile('image')){
+            $image = $request->file('image');
+            $filename = 'post'.'-'.time().'-'.$image->getClinetOriginalExtension();
+
+            $location = public_path('Upload/Post');
+            $request->file('image')->move($location, $filename);
+
+            $requestData['post_image'] = $filename;
+        }
         $post = Post::findOrFail($id);
         $post->update($requestData);
-
         return redirect('admin/post')->with('flash_message', 'Post updated!');
     }
 

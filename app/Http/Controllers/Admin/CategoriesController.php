@@ -51,7 +51,8 @@ class CategoriesController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-			'cate_name' => 'required'
+			'cate_name' => 'required',
+			'cate_slug' => 'required'
 		]);
         $requestData = $request->all();
         
@@ -99,7 +100,8 @@ class CategoriesController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-			'cate_name' => 'required'
+			'cate_name' => 'required',
+			'cate_slug' => 'required'
 		]);
         $requestData = $request->all();
         

@@ -1,4 +1,4 @@
-@extends('layouts.backend')
+@extends('layouts.app')
 
 @section('content')
     <div class="container">
@@ -28,12 +28,12 @@
                         <br/>
 
                         <div class="table-responsive">
-                            <table class="table">
+                            <table class="table table-borderless">
                                 <tbody>
                                     <tr>
                                         <th>ID</th><td>{{ $post->id }}</td>
                                     </tr>
-                                    <tr><th> Post Title </th><td> {{ $post->post_title }} </td></tr><tr><th> Post Teaser </th><td> {{ $post->post_teaser }} </td></tr><tr><th> Post Content </th><td> {{ $post->post_content }} </td></tr>
+                                    <tr><th> Post Cateid </th><td> {{ $post->post_cateid }} </td></tr><tr><th> Post Title </th><td> {{ $post->post_title }} </td></tr><tr><th> Post Teaser </th><td> {{ $post->post_teaser }} </td></tr>
                                 </tbody>
                             </table>
                         </div>
